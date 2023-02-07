@@ -6,14 +6,14 @@ type Data = {
   output: string
 }
 
-const GPT_KEY = ''
 
 
 export default async function generate(
   req: NextApiRequest,
   res: NextApiResponse<Data>
-) {
-    const { to, context, purpose, tone, length } = req.body;
+  ) {
+    const { to, context, purpose, tone, length, apiKey} = req.body;
+    const GPT_KEY = apiKey;
     const prompt = `Generate an email to ${to} with the following information:
     Context: ${context}
     Purpose: ${purpose}
