@@ -13,11 +13,17 @@ export default function Home() {
   const [to, setTo] = useState("");
   const [context, setContext] = useState("");
   const [purpose, setPurpose] = useState("");
-  const [additionalTopics, setAdditionalTopics] = useState("");
+  const [tone, setTone] = useState("");
   const [length, setLength] = useState("short");
   const [output, setOutput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleGenerate = () => {
+
+    setOutput('Generating email...')
+    setIsLoading(true)
+
+    console.log("Generating email...");
     fetch("/api/generate", {
       method: "POST",
       headers: {
@@ -27,7 +33,7 @@ export default function Home() {
         to,
         context,
         purpose,
-        additionalTopics,
+        tone,
         length,
       }),
     })
@@ -36,7 +42,8 @@ export default function Home() {
         setOutput(data.output);
       }
       );
-      
+
+      setIsLoading(false);
   };
 
   return (
@@ -68,9 +75,9 @@ export default function Home() {
         />
         <TextField
           sx={{ input: { color: 'white' }, label: { color: 'lightgrey' } }}
-          label="Additional Topics"
-          value={additionalTopics}
-          onChange={(event) => setAdditionalTopics(event.target.value)}
+          label="Tone"
+          value={tone}
+          onChange={(event) => setTone(event.target.value)}
           fullWidth
           margin="normal"
         />
@@ -90,7 +97,7 @@ export default function Home() {
         <Button
           variant="contained"
           style={classes.button}
-          onClick={handleGenerate}
+          onClick={() => handleGenerate()}
         >
           Generate
         </Button>
@@ -115,6 +122,7 @@ const classes = {
     flexDirection: "row",
     height: "100vh",
     backgroundColor: "#0D1B2A",
+    flexWrap: 'nowrap'
   },
   formContainer: {
     flex: 1,
@@ -125,20 +133,27 @@ const classes = {
     width: "100%",
     backgroundColor: "#415A77",
     color: "white",
+    flexWrap: 'nowrap'
   },
   textDisplay: {
-    border: "1px solid #415A77",
-    borderStyle: 'solid solid solid none',
+    flex: 1,
+    padding: "5rem",
+    display: "flex",
+    flexDirection: "column",
     maxWidth: "50rem",
     width: "100%",
-    padding: "2rem",
+    color: "white",
+    flexWrap: 'nowrap',
+    border: '1px solid white',
+    borderStyle: 'solid solid solid none',
   },
   text: {
     color: "white",
+    whiteSpace: 'pre-wrap'
   },
   button: {
     backgroundColor: "#778DA9",
     color: "white",
-    marginTop: "1rem",
+    marginTop: "2rem",
   },
 };
