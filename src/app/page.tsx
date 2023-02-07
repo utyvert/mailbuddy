@@ -1,91 +1,144 @@
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import styles from './page.module.css'
+"use client";
 
-const inter = Inter({ subsets: ['latin'] })
+import React, { useState } from "react";
+import { Button, Grid, TextField, Select, MenuItem } from "@mui/material";
+import { Inter } from "@next/font/google";
+
+
+const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
+  
+
+  const [to, setTo] = useState("");
+  const [context, setContext] = useState("");
+  const [purpose, setPurpose] = useState("");
+  const [additionalTopics, setAdditionalTopics] = useState("");
+  const [length, setLength] = useState("short");
+  const [output, setOutput] = useState("");
+
+  const handleGenerate = () => {
+    fetch("/api/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        to,
+        context,
+        purpose,
+        additionalTopics,
+        length,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setOutput(data.output);
+      }
+      );
+      
+  };
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+    <div style={classes.root}>
+      <Grid container style={classes.formContainer}>
+        <TextField
+          sx={{ input: { color: 'white' }, label: { color: 'lightgrey' } }}
+          label="To"
+          value={to}
+          onChange={(event) => setTo(event.target.value)}
+          fullWidth
+          margin="normal"
         />
-        <div className={styles.thirteen}>
-          <Image src="/thirteen.svg" alt="13" width={40} height={31} priority />
-        </div>
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://beta.nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
+        <TextField
+          sx={{ input: { color: 'white' }, label: { color: 'lightgrey' } }}
+          label="Context"
+          value={context}
+          onChange={(event) => setContext(event.target.value)}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          sx={{ input: { color: 'white' }, label: { color: 'lightgrey' } }}
+          label="Purpose"
+          value={purpose}
+          onChange={(event) => setPurpose(event.target.value)}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          sx={{ input: { color: 'white' }, label: { color: 'lightgrey' } }}
+          label="Additional Topics"
+          value={additionalTopics}
+          onChange={(event) => setAdditionalTopics(event.target.value)}
+          fullWidth
+          margin="normal"
+        />
+        <Select
+          label="Length"
+          value={length}
+          onChange={(event) => setLength(event.target.value)}
+          fullWidth
+          margin="normal"
+          defaultValue="short"
+          sx={{color: 'lightgrey', marginTop: '1rem' }}
         >
-          <h2 className={inter.className}>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Find in-depth information about Next.js features and API.
+          <MenuItem value="short">Short</MenuItem>
+          <MenuItem value="medium">Medium</MenuItem>
+          <MenuItem value="long">Long</MenuItem>
+        </Select>
+        <Button
+          variant="contained"
+          style={classes.button}
+          onClick={handleGenerate}
+        >
+          Generate
+        </Button>
+      </Grid>
+      <Grid container style={classes.textDisplay}>
+        {output && (
+          <p style={classes.text}> 
+            {output}
           </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+        )}
+      </Grid>
+    </div>
+  );
 }
+
+
+const classes = {
+  root: {
+    fontFamily: "Inter",
+    padding: "10rem",
+    display: "flex",
+    flexDirection: "row",
+    height: "100vh",
+    backgroundColor: "#0D1B2A",
+  },
+  formContainer: {
+    flex: 1,
+    padding: "5rem",
+    display: "flex",
+    flexDirection: "column",
+    maxWidth: "50rem",
+    width: "100%",
+    backgroundColor: "#415A77",
+    color: "white",
+  },
+  textDisplay: {
+    border: "1px solid #415A77",
+    borderStyle: 'solid solid solid none',
+    maxWidth: "50rem",
+    width: "100%",
+    padding: "2rem",
+  },
+  text: {
+    color: "white",
+  },
+  button: {
+    backgroundColor: "#778DA9",
+    color: "white",
+    marginTop: "1rem",
+  },
+};
