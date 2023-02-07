@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button, Grid, TextField, Select, MenuItem } from "@mui/material";
+import { Button, Grid, TextField, Select, MenuItem, Input } from "@mui/material";
 import { Inter } from "@next/font/google";
 
 
@@ -17,6 +17,7 @@ export default function Home() {
   const [length, setLength] = useState("short");
   const [output, setOutput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [apiKey, setApiKey] = useState("");
 
   const handleGenerate = () => {
 
@@ -35,6 +36,7 @@ export default function Home() {
         purpose,
         tone,
         length,
+        apiKey,
       }),
     })
       .then((res) => res.json())
@@ -55,7 +57,6 @@ export default function Home() {
           value={to}
           onChange={(event) => setTo(event.target.value)}
           fullWidth
-          margin="normal"
         />
         <TextField
           sx={{ input: { color: 'white' }, label: { color: 'lightgrey' } }}
@@ -63,7 +64,6 @@ export default function Home() {
           value={context}
           onChange={(event) => setContext(event.target.value)}
           fullWidth
-          margin="normal"
         />
         <TextField
           sx={{ input: { color: 'white' }, label: { color: 'lightgrey' } }}
@@ -71,7 +71,6 @@ export default function Home() {
           value={purpose}
           onChange={(event) => setPurpose(event.target.value)}
           fullWidth
-          margin="normal"
         />
         <TextField
           sx={{ input: { color: 'white' }, label: { color: 'lightgrey' } }}
@@ -79,21 +78,25 @@ export default function Home() {
           value={tone}
           onChange={(event) => setTone(event.target.value)}
           fullWidth
-          margin="normal"
         />
         <Select
           label="Length"
           value={length}
           onChange={(event) => setLength(event.target.value)}
           fullWidth
-          margin="normal"
           defaultValue="short"
-          sx={{color: 'lightgrey', marginTop: '1rem' }}
+          sx={{color: 'lightgrey'}}
         >
           <MenuItem value="short">Short</MenuItem>
           <MenuItem value="medium">Medium</MenuItem>
           <MenuItem value="long">Long</MenuItem>
         </Select>
+        <TextField
+        onChange={(event) => setApiKey(event.target.value)}
+        value={apiKey}
+        label='API Key'
+        variant="outlined"
+        />
         <Button
           variant="contained"
           style={classes.button}
@@ -101,6 +104,7 @@ export default function Home() {
         >
           Generate
         </Button>
+ 
       </Grid>
       <Grid container style={classes.textDisplay}>
         {output && (
@@ -125,15 +129,16 @@ const classes = {
     flexWrap: 'nowrap'
   },
   formContainer: {
-    flex: 1,
-    padding: "5rem",
+    gap: "1.5rem",
+    padding: "4rem",
     display: "flex",
     flexDirection: "column",
     maxWidth: "50rem",
     width: "100%",
     backgroundColor: "#415A77",
     color: "white",
-    flexWrap: 'nowrap'
+    flexWrap: 'nowrap',
+    borderRadius: '5px'
   },
   textDisplay: {
     flex: 1,
@@ -146,7 +151,7 @@ const classes = {
     flexWrap: 'nowrap',
     border: '1px solid white',
     borderStyle: 'solid solid solid none',
-    overflowY: 'auto' 
+    overflowY: 'auto',
   },
   text: {
     color: "white",
@@ -155,6 +160,6 @@ const classes = {
   button: {
     backgroundColor: "#778DA9",
     color: "white",
-    marginTop: "2rem",
+    marginTop: "1rem",
   },
 };
