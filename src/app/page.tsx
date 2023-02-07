@@ -146,6 +146,7 @@ const classes = {
     flexWrap: 'nowrap',
     border: '1px solid white',
     borderStyle: 'solid solid solid none',
+    overflowY: 'auto' 
   },
   text: {
     color: "white",
