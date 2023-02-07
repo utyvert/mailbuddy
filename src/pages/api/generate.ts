@@ -6,6 +6,15 @@ type Data = {
   output: string
 }
 
+type Request = {
+  to: string,
+  context: string,
+  purpose: string,
+  tone: string,
+  length: string,
+  apiKey: string
+}
+
 
 
 export default async function generate(
