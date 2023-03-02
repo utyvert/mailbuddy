@@ -1,5 +1,6 @@
-1. Add your OpenAI API key.
-2. Generate emails.
+1. `npm install` then `npm run`
+2. Add your OpenAI API key.
+3. Generate emails.
 
 
 
